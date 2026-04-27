@@ -250,10 +250,14 @@
 <script>
 (function() {
   function init() {
-    // ===== Mobile Menu Toggle =====
+    // ===== Mobile Menu — moves menu OUT of nav into body to escape any parent constraints =====
     var toggle = document.getElementById('menuToggle');
     var menu = document.getElementById('navMenu');
     if (toggle && menu) {
+      // Move menu to body to escape any nav overflow/z-index issues
+      if (menu.parentElement.tagName !== 'BODY') {
+        document.body.appendChild(menu);
+      }
       toggle.onclick = function(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -368,11 +372,9 @@
       });
     }
 
-    // ===== Min date on reservation =====
     var dateInput = document.querySelector('input[name="date"]');
     if (dateInput) dateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
 
-    // ===== Stats counter =====
     var statsObs = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         if (entry.isIntersecting && !entry.target.classList.contains('counted')) {
@@ -399,7 +401,6 @@
     var statsEls = document.querySelectorAll('.about-stats');
     for (var i = 0; i < statsEls.length; i++) statsObs.observe(statsEls[i]);
 
-    // ===== Year =====
     var yr = document.getElementById('currentYear');
     if (yr) yr.textContent = new Date().getFullYear();
   }
